@@ -20,7 +20,7 @@
   @include p.backgroundMain;
 }
 
-.header p {
+.header h1 {
   @include p.textH;
   max-width: 40%;
 }
