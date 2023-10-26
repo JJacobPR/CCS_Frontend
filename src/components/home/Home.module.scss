@@ -1,0 +1,44 @@
+@use "../../assets/partials/" as p;
+
+.homeSection {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  @include p.textP;
+}
+
+.btn {
+  @include p.btnMain;
+}
+
+.header {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  @include p.backgroundMain;
+}
+
+.header p {
+  @include p.textH;
+  max-width: 40%;
+}
+
+.header img {
+  max-width: 40%;
+}
+
+.homeButtons {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  gap: 2rem;
+  text-decoration: none;
+}
+
+.homeButtons p {
+  padding-bottom: 1rem;
+  transform: scale(0.75);
+}
