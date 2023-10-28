@@ -7,16 +7,39 @@
   border-radius: 1.5rem;
   background-clip: padding-box;
   position: relative;
-  &:hover {
-    background-color: #eaeaea;
-  }
+  margin-bottom: 1rem;
 }
 
-.fileBox p {
+.browse {
   @include p.textP;
   height: 2rem;
-  position: absolute;
-  inset: 0;
-  margin: auto;
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.browse p {
   opacity: 0.2;
+}
+
+.browse input {
+  display: none;
+}
+
+.browse label {
+  @include p.btnMain;
+}
+
+.boxDragOver {
+  background-color: #eaeaea !important;
+}
+
+.hidden {
+  display: none;
+}
+
+.files {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 1rem;
+  gap: 1rem;
 }

@@ -12,6 +12,8 @@
   background: p.$backgroundGradient;
   padding: clamp(0.5rem, 0rem + 2.2222vw, 2rem) clamp(0.5rem, 0rem + 2.2222vw, 2rem) clamp(0.5rem, 0rem + 2.2222vw, 2rem) clamp(0.5rem, 0rem + 2.2222vw, 2rem);
   max-width: 20%;
+  position: sticky;
+  right: 0;
 }
 
 .logo img {
