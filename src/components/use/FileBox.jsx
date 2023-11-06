@@ -1,9 +1,11 @@
 import { Fragment, useState } from "react";
 import style from "./FileBox.module.scss";
 import FileItem from "./FileItem.jsx";
+import { update } from "immutable";
 
 const FileBox = () => {
   const [fileList, updateFileList] = useState([]);
+  const [dragActive, updateDragActive] = useState(false)
 
   const handleFileInput = (e) => {
     updateFileList([...fileList, e.target.files[0]]);
@@ -20,34 +22,36 @@ const FileBox = () => {
 
   const dragEnter = (e) => {
     e.preventDefault();
-    e.target.className = `${e.target.className} ${style.boxDragOver}`;
+    updateDragActive(true)
   };
 
   const dragLeave = (e) => {
     e.preventDefault();
-    e.target.className = e.target.className.replace(style.boxDragOver, "").trim();
+    updateDragActive(false)
   };
 
   const dragDrop = (e) => {
+    console.log("Calling")
     e.preventDefault();
+    updateDragActive(false)
     updateFileList([...fileList, e.dataTransfer.files[0]]);
   };
 
   return (
-    <Fragment>
+    <div className={style.fileBoxSection}>
       <div className={style.browse}>
         <p>Drop Items Below or&nbsp;</p>
         <label htmlFor="avatar"> Browse </label>
         <input onChange={handleFileInput} type="file" id="avatar" name="avatar" />
       </div>
-      <div onDrop={dragDrop} onDragEnter={dragEnter} onDragLeave={dragLeave} className={style.fileBox}>
+      <div onDrop={dragDrop} onDragEnter={dragEnter} onDragLeave={dragLeave} className={dragActive ? style.fileBox + " " + style.boxDragOver  : style.fileBox}>
         <div className={style.files}>
           {fileList.map((file, index) => (
             <FileItem key={index} fileName={file.name} type={file.name.split(".").pop()} fileSize={file.size} />
           ))}
         </div>
       </div>
-    </Fragment>
+    </div>
   );
 };
 

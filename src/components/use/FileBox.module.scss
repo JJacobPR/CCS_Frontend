@@ -1,13 +1,26 @@
 @use "../../assets//partials/" as p;
 
+.fileBoxSection{
+  display: flex;
+  flex-direction: column;
+  height: 80%;
+}
+
 .fileBox {
-  min-height: 80%;
+  height: auto;
   width: 90%;
   border: 0.25rem dashed p.$fileBoxBorder;
   border-radius: 1.5rem;
   background-clip: padding-box;
   position: relative;
   margin-bottom: 1rem;
+}
+
+.files {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 1rem;
+  gap: 1rem;
 }
 
 .browse {
@@ -37,9 +50,3 @@
   display: none;
 }
 
-.files {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 1rem;
-  gap: 1rem;
-}

@@ -2,6 +2,7 @@ import Header from "../home/Header.jsx";
 import person from "../../assets/img/person.svg";
 import styles from "./Login.module.scss";
 import { Link } from "react-router-dom";
+import Footer from "../footer/Footer.jsx";
 
 const Login = () => {
   return (
@@ -18,6 +19,7 @@ const Login = () => {
           </Link>
         </form>
       </div>
+      <Footer/>
     </section>
   );
 };

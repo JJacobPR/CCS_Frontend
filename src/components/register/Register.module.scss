@@ -3,6 +3,7 @@
 .sectionRegister {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
   gap: 5rem;
 }
 
@@ -10,6 +11,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
   gap: 4rem;
   @include p.textP;
   text-align: left;

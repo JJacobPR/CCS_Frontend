@@ -1,0 +1,11 @@
+@use "../../assets/partials/" as p;
+
+
+.footerSection {
+  @include p.backgroundMain;
+  @include p.textP;
+  text-align: left;
+  padding: 0.5rem 0.25rem;
+  color: white;
+  margin-top: auto;
+}

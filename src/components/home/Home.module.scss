@@ -3,7 +3,8 @@
 .homeSection {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+ gap: 5rem;
+  min-height: 100vh;
   @include p.textP;
 }
 

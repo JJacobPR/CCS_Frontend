@@ -1,6 +1,7 @@
 import Header from "../home/Header.jsx";
 import person from "../../assets/img/person.svg";
 import styles from "./Register.module.scss";
+import Footer from "../footer/Footer.jsx";
 
 const Register = () => {
   return (
@@ -16,6 +17,7 @@ const Register = () => {
           <button>Register</button>
         </form>
       </div>
+      <Footer/>
     </section>
   );
 };
