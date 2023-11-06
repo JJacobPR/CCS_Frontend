@@ -6,9 +6,11 @@
   border: 0.25rem solid p.$backgroundInput;
   border-radius: 1rem;
   align-items: center;
+  position: relative;
   padding: 1%;
   display: flex;
   background-color: white;
+  cursor: pointer;
 
   @media screen and (max-width: 1440px) {
     width: 48%;
@@ -35,4 +37,13 @@
   text-align: left;
   gap: 1rem;
   font-size: clamp(0.5rem, 0.3333rem + 0.7407vw, 1rem);
+}
+
+.trashIcon {
+  position: absolute;
+  max-height: 40px;
+  max-width: 40px;
+  top: 0.25rem;
+  right: 0.25rem;
+  cursor: pointer;
 }

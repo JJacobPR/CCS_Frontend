@@ -1,14 +1,14 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import style from "./FileBox.module.scss";
 import FileItem from "./FileItem.jsx";
-import { update } from "immutable";
+import { nanoid } from "nanoid";
 
 const FileBox = () => {
   const [fileList, updateFileList] = useState([]);
-  const [dragActive, updateDragActive] = useState(false)
+  const [dragActive, updateDragActive] = useState(false);
 
   const handleFileInput = (e) => {
-    updateFileList([...fileList, e.target.files[0]]);
+    handleFile(e.target.files[0]);
   };
 
   const createFormData = () => {
@@ -22,20 +22,43 @@ const FileBox = () => {
 
   const dragEnter = (e) => {
     e.preventDefault();
-    updateDragActive(true)
+    updateDragActive(true);
   };
 
   const dragLeave = (e) => {
     e.preventDefault();
-    updateDragActive(false)
+    updateDragActive(false);
   };
 
   const dragDrop = (e) => {
-    console.log("Calling")
     e.preventDefault();
-    updateDragActive(false)
-    updateFileList([...fileList, e.dataTransfer.files[0]]);
+    updateDragActive(false);
+    handleFile(e.dataTransfer.files[0]);
   };
+
+  const handleFile = (file) => {
+    if (file.size > 20971520) {
+      alert("File is too big");
+      return;
+    }
+    updateFileList([...fileList, { id: nanoid(), file }]);
+  };
+
+  const removeItem = (removeId) => {
+    updateFileList(fileList.filter((file) => file.id !== removeId));
+  };
+
+  function saveBlob(blob, fileName) {
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+
+    const url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
 
   return (
     <div className={style.fileBoxSection}>
@@ -44,10 +67,10 @@ const FileBox = () => {
         <label htmlFor="avatar"> Browse </label>
         <input onChange={handleFileInput} type="file" id="avatar" name="avatar" />
       </div>
-      <div onDrop={dragDrop} onDragEnter={dragEnter} onDragLeave={dragLeave} className={dragActive ? style.fileBox + " " + style.boxDragOver  : style.fileBox}>
+      <div onDrop={dragDrop} onDragOver={dragEnter} onDragLeave={dragLeave} className={dragActive ? style.fileBox + " " + style.boxDragOver : style.fileBox}>
         <div className={style.files}>
           {fileList.map((file, index) => (
-            <FileItem key={index} fileName={file.name} type={file.name.split(".").pop()} fileSize={file.size} />
+            <FileItem downloadItem={saveBlob} removeItem={removeItem} key={index} fileId={file.id} file={file.file} type={file.file.name.split(".").pop()} />
           ))}
         </div>
       </div>
