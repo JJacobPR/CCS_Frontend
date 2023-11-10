@@ -5,7 +5,6 @@ import basicImg from "../../assets/img/fileImg/dummy.png";
 
 const FileItem = (props) => {
   const img = useImage(props.type);
-  console.log(props.file);
 
   const trashClick = (e) => {
     e.preventDefault();
@@ -19,7 +18,7 @@ const FileItem = (props) => {
         <img src={img.image ? img.image : basicImg} />
       </div>
       <div className={styles.fileDesc}>
-        <p>Name: {props.file.name.length < 30 ? props.file.name : props.file.name.slice(0, 30) + "..."}</p>
+        <p>Name: {props.file.name.length < 20 ? props.file.name : props.file.name.slice(0, 20) + "..."}</p>
         <p>Size: {(props.file.size / 1024 ** 2).toFixed(2)}mb</p>
       </div>
       <img onClick={trashClick} className={styles.trashIcon} src={trashIcon} />
