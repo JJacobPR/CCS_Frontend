@@ -30,6 +30,26 @@ function zipFiles(fileList) {
   });
 }
 
+function handleZipFile(file) {
+  if (file) {
+    const zip = new JSZip();
+
+    zip
+      .loadAsync(file)
+      .then((zipContent) => {
+        // Access the contents of the zip file
+        zipContent.forEach((relativePath, zipEntry) => {
+          zipEntry.async("blob").then((blob) => {
+            const filez = new File([blob], relativePath, { type: blob.type });
+          });
+        });
+      })
+      .catch((error) => {
+        console.error("Error reading zip file:", error);
+      });
+  }
+}
+
 const FileBox = () => {
   const [fileList, updateFileList] = useState([]);
   const [dragActive, updateDragActive] = useState(false);
