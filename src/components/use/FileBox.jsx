@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import style from "./FileBox.module.scss";
 import FileItem from "./FileItem.jsx";
 import { nanoid } from "nanoid";
@@ -25,50 +25,80 @@ function zipFiles(fileList) {
     zip.file(file.file.name, file.file);
   });
 
-  zip.generateAsync({ type: "blob" }).then(function (blob) {
-    saveBlob(blob, "Test.zip");
-  });
-}
-
-function handleZipFile(file) {
-  if (file) {
-    const zip = new JSZip();
-
-    zip
-      .loadAsync(file)
-      .then((zipContent) => {
-        // Access the contents of the zip file
-        zipContent.forEach((relativePath, zipEntry) => {
-          zipEntry.async("blob").then((blob) => {
-            const filez = new File([blob], relativePath, { type: blob.type });
-          });
-        });
-      })
-      .catch((error) => {
-        console.error("Error reading zip file:", error);
-      });
-  }
+  return zip.generateAsync({ type: "blob" });
 }
 
 const FileBox = () => {
   const [fileList, updateFileList] = useState([]);
   const [dragActive, updateDragActive] = useState(false);
 
+  const fetchDataInitial = useCallback(async () => {
+    try {
+      const response = await fetch("http://localhost:3000/posts");
+
+      if (!response.ok) throw new Error("Bad data received");
+
+      const data = await response.json();
+
+      //Load files from zip
+      // const files = [];
+      // const zipContent = await handleZipFile(file);
+
+      // zipContent.forEach((relativePath, zipEntry) => {
+      //   zipEntry.async("blob").then((blob) => {
+      //     const n = new File([blob], relativePath, { type: blob.type });
+      //     files.push({ id: nanoid(), file: n });
+      //     updateFileList([...fileList, ...files]);
+      //   });
+      // });
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  useEffect(() => {
+    fetchDataInitial();
+  }, []);
+
+  const handleZipFile = (file) => {
+    return new Promise((resolve, reject) => {
+      if (file) {
+        const zip = new JSZip();
+
+        zip
+          .loadAsync(file)
+          .then((zipContent) => {
+            resolve(zipContent);
+          })
+          .catch((error) => {
+            console.error("Error reading zip file:", error);
+            reject(error);
+          });
+      } else {
+        reject(new Error("No file provided."));
+      }
+    });
+  };
+
   const handleFileInput = (e) => {
     handleFile(e.target.files[0]);
   };
 
-  const createFormData = () => {
-    const formData = new FormData();
+  const postChanges = async () => {
+    try {
+      const zipBlob = await zipFiles(fileList);
+      const formData = new FormData();
+      formData.append("zipFile", zipBlob, "Test.zip");
 
-    Object.entries(fileList).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-    return formData;
-  };
+      const response = await fetch("http://localhost:3000/posts", {
+        method: "POST",
+        body: formData,
+      });
 
-  const postChanges = () => {
-    zipFiles(fileList);
+      console.log(response);
+    } catch (error) {
+      console.error("Error generating zip file:", error);
+    }
   };
 
   const handleFile = (file) => {
@@ -83,6 +113,13 @@ const FileBox = () => {
     updateFileList(fileList.filter((file) => file.id !== removeId));
   };
 
+  const dragDrop = (e) => {
+    e.preventDefault();
+    updateDragActive(false);
+    handleFile(e.dataTransfer.files[0]);
+  };
+
+  //UI Changes
   const dragEnter = (e) => {
     e.preventDefault();
     updateDragActive(true);
@@ -91,12 +128,6 @@ const FileBox = () => {
   const dragLeave = (e) => {
     e.preventDefault();
     updateDragActive(false);
-  };
-
-  const dragDrop = (e) => {
-    e.preventDefault();
-    updateDragActive(false);
-    handleFile(e.dataTransfer.files[0]);
   };
 
   return (
