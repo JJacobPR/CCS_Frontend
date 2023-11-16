@@ -20,7 +20,6 @@ function saveBlob(blob, fileName) {
 //Zipping Files on Upload Click
 function zipFiles(fileList) {
   const zip = new JSZip();
-
   fileList.forEach((file) => {
     zip.file(file.file.name, file.file);
   });
@@ -34,23 +33,30 @@ const FileBox = () => {
 
   const fetchDataInitial = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:3000/posts");
+      const response = await fetch("http://localhost:3000/files");
 
       if (!response.ok) throw new Error("Bad data received");
-
       const data = await response.json();
+      
+      const fileResponse = await fetch(data[4].url);
 
-      //Load files from zip
-      // const files = [];
-      // const zipContent = await handleZipFile(file);
+      if (!fileResponse.ok) throw new Error("Wrong File Url");
 
-      // zipContent.forEach((relativePath, zipEntry) => {
-      //   zipEntry.async("blob").then((blob) => {
-      //     const n = new File([blob], relativePath, { type: blob.type });
-      //     files.push({ id: nanoid(), file: n });
-      //     updateFileList([...fileList, ...files]);
-      //   });
-      // });
+
+      const fileBlob = await fileResponse.blob();
+      const zipFile = new File([fileBlob], "User Data", { type: fileBlob.type });
+
+  
+      const files = [];
+      const zipContent = await handleZipFile(zipFile);
+
+      zipContent.forEach((relativePath, zipEntry) => {
+        zipEntry.async("blob").then((blob) => {
+          const n = new File([blob], relativePath, { type: blob.type });
+          files.push({ id: nanoid(), file: n });
+          updateFileList([...fileList, ...files]);
+        });
+      });
     } catch (error) {
       console.error(error);
     }
@@ -88,9 +94,9 @@ const FileBox = () => {
     try {
       const zipBlob = await zipFiles(fileList);
       const formData = new FormData();
-      formData.append("zipFile", zipBlob, "Test.zip");
-
-      const response = await fetch("http://localhost:3000/posts", {
+      formData.append("file", zipBlob, "Test.zip");
+      console.log(formData)
+      const response = await fetch("http://localhost:3000/files", {
         method: "POST",
         body: formData,
       });
