@@ -1,10 +1,21 @@
 import Header from "../home/Header.jsx";
 import person from "../../assets/img/person.svg";
 import styles from "./Login.module.scss";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Footer from "../footer/Footer.jsx";
 
 const Login = () => {
+
+  const loginHandler = async (event) => {
+    event.preventDefault();
+    // try {
+    //   const response = await fetch("http://localhost:3000/auth/login")
+    // } catch(error){
+    //   console.error(error)
+    // }
+  }
+
+
   return (
     <section className={styles.sectionLogin}>
       <Header />
@@ -14,9 +25,9 @@ const Login = () => {
           <label>Login to your account</label>
           <input placeholder="email/name" />
           <input placeholder="password" />
-          <Link className={styles.link} style={{ textDecoration: "none" }} to="/user">
+          <button onClick={loginHandler} className={styles.link}>
             Login
-          </Link>
+          </button>
         </form>
       </div>
       <Footer/>
