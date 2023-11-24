@@ -3,6 +3,7 @@ import style from "./FileBox.module.scss";
 import FileItem from "./FileItem.jsx";
 import { nanoid } from "nanoid";
 import * as JSZip from "JSZip";
+import refreshToken from "../../helpers/refreshToken.js";
 
 //Download File
 function saveBlob(blob, fileName) {
@@ -32,28 +33,34 @@ const FileBox = () => {
   const [dragActive, updateDragActive] = useState(false);
 
   const fetchDataInitial = useCallback(async () => {
+    console.log(document.cookie);
+
+    // if (document.cookie.length < 250) await refreshToken();
+
+    const token = document.cookie.slice(192);
     try {
-      const response = await fetch("http://localhost:3000/files");
+      const response = await fetch(`http://localhost:3000/files`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       if (!response.ok) throw new Error("Bad data received");
       const data = await response.json();
-      
-      const fileResponse = await fetch(data[4].url);
 
+      const fileResponse = await fetch(data[0].url);
       if (!fileResponse.ok) throw new Error("Wrong File Url");
 
-
       const fileBlob = await fileResponse.blob();
+
       const zipFile = new File([fileBlob], "User Data", { type: fileBlob.type });
 
-  
       const files = [];
+
       const zipContent = await handleZipFile(zipFile);
 
       zipContent.forEach((relativePath, zipEntry) => {
         zipEntry.async("blob").then((blob) => {
-          const n = new File([blob], relativePath, { type: blob.type });
-          files.push({ id: nanoid(), file: n });
+          const fileFromZip = new File([blob], relativePath, { type: blob.type });
+          files.push({ id: nanoid(), file: fileFromZip });
           updateFileList([...fileList, ...files]);
         });
       });
@@ -95,7 +102,7 @@ const FileBox = () => {
       const zipBlob = await zipFiles(fileList);
       const formData = new FormData();
       formData.append("file", zipBlob, "Test.zip");
-      console.log(formData)
+      console.log(formData);
       const response = await fetch("http://localhost:3000/files", {
         method: "POST",
         body: formData,
