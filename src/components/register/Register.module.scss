@@ -11,21 +11,21 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
-  gap: 4rem;
+  padding: 0 1rem 0 1rem;
+  gap: 7%;
   @include p.textP;
   text-align: left;
 
   img {
     max-width: 40%;
   }
-
 }
 
 .registerForm {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  position: relative;
 
   button {
     @include p.btnMain;
@@ -39,4 +39,21 @@
     padding: 0.125rem;
   }
 
+  .linkLogin {
+    position: absolute;
+    bottom: -10%;
+    left: 0;
+    @include p.textP;
+    font-size: clamp(0.75rem, 0.6211rem + 0.4211vw, 1rem);
+    color: blue;
+  }
+
+  .errorMessage {
+    position: absolute;
+    bottom: -18%;
+    left: 0;
+    @include p.textP;
+    font-size: clamp(0.75rem, 0.6211rem + 0.4211vw, 1rem);
+    color: red;
+  }
 }

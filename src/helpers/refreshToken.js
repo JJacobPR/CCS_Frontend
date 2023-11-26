@@ -1,6 +1,7 @@
 import createCookie from "./createCookie.js";
 
 const refreshTokenFunc = async (refreshToken) => {
+  console.log("Calling");
   const response = await fetch("http://localhost:3000/auth/refreshToken", {
     method: "POST",
     headers: {

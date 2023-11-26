@@ -5,7 +5,7 @@ import HomeView from "./routes/HomeView.jsx";
 import LoginView from "./routes/LoginView.jsx";
 import RegisterView from "./routes/RegisterView.jsx";
 import "./App.scss";
-import UseView from "./routes/UseView.jsx";
+import UserView from "./routes/UserView.jsx";
 import { CookiesProvider } from "react-cookie";
 
 const router = createBrowserRouter([
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/user",
-    element: <UseView />,
+    element: <UserView />,
   },
 ]);
 

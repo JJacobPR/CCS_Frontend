@@ -1,8 +1,9 @@
 import Header from "../home/Header.jsx";
 import person from "../../assets/img/person.svg";
 import styles from "./Login.module.scss";
-import { useNavigate } from "react-router-dom";
 import Footer from "../footer/Footer.jsx";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import createCookie from "../../helpers/createCookie.js";
 
@@ -42,13 +43,16 @@ const Login = () => {
       <Header />
       <div className={styles.login}>
         <img src={person} />
-        <form className={styles.loginForm}>
+        <form onSubmit={loginHandler} className={styles.loginForm}>
           <label>Login to your account</label>
-          <input onChange={(e) => updateEmail(e.target.value)} placeholder="email" />
-          <input onChange={(e) => updatePassword(e.target.value)} placeholder="password" />
-          <button onClick={loginHandler} className={styles.link}>
+          <input type="email" onChange={(e) => updateEmail(e.target.value)} placeholder="Email" required />
+          <input type="password" onChange={(e) => updatePassword(e.target.value)} placeholder="Password" required />
+          <button type="submit" className={styles.link}>
             Login
           </button>
+          <Link style={{ textDecoration: "none" }} className={styles.linkRegister} to="/register">
+            Don't have account? Register here
+          </Link>
         </form>
       </div>
       <Footer />

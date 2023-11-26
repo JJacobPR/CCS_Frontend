@@ -3,7 +3,7 @@
 .homeSection {
   display: flex;
   flex-direction: column;
- gap: 5rem;
+  gap: 5rem;
   min-height: 100vh;
   @include p.textP;
 }
@@ -17,17 +17,17 @@
   width: 100%;
   align-items: center;
   justify-content: center;
-  padding: 3rem;
+  padding: 1rem;
   @include p.backgroundMain;
-}
 
-.header h1 {
-  @include p.textH;
-  max-width: 40%;
-}
+  h1 {
+    @include p.textH;
+    max-width: 40%;
+  }
 
-.header img {
-  max-width: 40%;
+  img {
+    max-width: 40%;
+  }
 }
 
 .homeButtons {

@@ -1,13 +1,9 @@
 import { useState, useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import style from "./FileBox.module.scss";
 import FileItem from "./FileItem.jsx";
 import { nanoid } from "nanoid";
 import * as JSZip from "JSZip";
-import refreshTokenFunc from "../../helpers/refreshToken.js";
 import downloadFile from "../../helpers/downloadFile.js";
-import createCookie from "../../helpers/createCookie.js";
-import { useCookies } from "react-cookie";
 
 //Zipping Files on Upload Click
 function zipFiles(fileList) {
@@ -19,54 +15,23 @@ function zipFiles(fileList) {
   return zip.generateAsync({ type: "blob" });
 }
 
-const FileBox = () => {
+const FileBox = (props) => {
   const [fileList, updateFileList] = useState([]);
   const [dragActive, updateDragActive] = useState(false);
-  const navigate = useNavigate();
-  const [cookies] = useCookies(["token"]);
-
-  const fetchDataInitial = useCallback(async () => {
-    try {
-      if (Object.keys(cookies).length === 0) throw new Error("No Refresh Token");
-      if (!Object.keys(cookies).includes("token")) {
-        await refreshTokenFunc(cookies.refreshToken);
-      }
-      const response = await fetch(`http://localhost:3000/files`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      // if (!response.ok) throw new Error("Bad data received");
-      // const data = await response.json();
-
-      // const fileResponse = await fetch(data[0].url);
-      // if (!fileResponse.ok) throw new Error("Wrong File Url");
-
-      // const fileBlob = await fileResponse.blob();
-
-      // const zipFile = new File([fileBlob], "User Data", { type: fileBlob.type });
-
-      // const files = [];
-
-      // const zipContent = await handleZipFile(zipFile);
-
-      // zipContent.forEach((relativePath, zipEntry) => {
-      //   zipEntry.async("blob").then((blob) => {
-      //     const fileFromZip = new File([blob], relativePath, { type: blob.type });
-      //     files.push({ id: nanoid(), file: fileFromZip });
-      //     updateFileList([...fileList, ...files]);
-      //   });
-      // });
-    } catch (error) {
-      if (error.message === "No Refresh Token") {
-        console.error(error);
-        navigate("/login");
-      }
-    }
-  });
 
   useEffect(() => {
-    fetchDataInitial();
-  }, []);
+    // console.log(props.zipBlob);
+    // const zipFile = new File([fileBlob], "User Data", { type: fileBlob.type });
+    // const files = [];
+    // const zipContent = await handleZipFile(zipFile);
+    // zipContent.forEach((relativePath, zipEntry) => {
+    //   zipEntry.async("blob").then((blob) => {
+    //     const fileFromZip = new File([blob], relativePath, { type: blob.type });
+    //     files.push({ id: nanoid(), file: fileFromZip });
+    //     updateFileList([...fileList, ...files]);
+    //   });
+    // });
+  }, [props.zipBlob]);
 
   const handleZipFile = (file) => {
     return new Promise((resolve, reject) => {
