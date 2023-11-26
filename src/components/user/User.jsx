@@ -15,11 +15,14 @@ const User = () => {
   const loginUser = useCallback(async () => {
     try {
       if (Object.keys(cookies).length === 0) throw new Error("No Refresh Token");
+
+      //Fix library is not working as intended when refreshingToken, must be fixed
       if (!Object.keys(cookies).includes("token")) {
         await refreshTokenFunc(cookies.refreshToken);
         console.log(document.cookie);
         console.log(cookies);
       }
+      //------------------------
       console.log(cookies.token);
       const response = await fetch(`http://localhost:3000/files`, {
         headers: { Authorization: `Bearer ${cookies.token}` },
