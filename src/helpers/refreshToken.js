@@ -1,8 +1,6 @@
 import createCookie from "./createCookie.js";
 
-const refreshToken = async () => {
-  const refreshToken = document.cookie.slice(13, 184);
-  console.log("Calling");
+const refreshTokenFunc = async (refreshToken) => {
   const response = await fetch("http://localhost:3000/auth/refreshToken", {
     method: "POST",
     headers: {
@@ -18,4 +16,4 @@ const refreshToken = async () => {
   createCookie("token", data.accessToken, 1);
 };
 
-export default refreshToken;
+export default refreshTokenFunc;

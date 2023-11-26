@@ -6,6 +6,7 @@ import LoginView from "./routes/LoginView.jsx";
 import RegisterView from "./routes/RegisterView.jsx";
 import "./App.scss";
 import UseView from "./routes/UseView.jsx";
+import { CookiesProvider } from "react-cookie";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <CookiesProvider defaultSetOptions={{ path: "/" }}>
+      <RouterProvider router={router} />
+    </CookiesProvider>
   </React.StrictMode>
 );

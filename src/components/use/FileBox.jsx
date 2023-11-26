@@ -1,22 +1,13 @@
 import { useState, useCallback, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import style from "./FileBox.module.scss";
 import FileItem from "./FileItem.jsx";
 import { nanoid } from "nanoid";
 import * as JSZip from "JSZip";
-import refreshToken from "../../helpers/refreshToken.js";
-
-//Download File
-function saveBlob(blob, fileName) {
-  const a = document.createElement("a");
-  document.body.appendChild(a);
-  a.style = "display: none";
-
-  const url = window.URL.createObjectURL(blob);
-  a.href = url;
-  a.download = fileName;
-  a.click();
-  window.URL.revokeObjectURL(url);
-}
+import refreshTokenFunc from "../../helpers/refreshToken.js";
+import downloadFile from "../../helpers/downloadFile.js";
+import createCookie from "../../helpers/createCookie.js";
+import { useCookies } from "react-cookie";
 
 //Zipping Files on Upload Click
 function zipFiles(fileList) {
@@ -31,41 +22,45 @@ function zipFiles(fileList) {
 const FileBox = () => {
   const [fileList, updateFileList] = useState([]);
   const [dragActive, updateDragActive] = useState(false);
+  const navigate = useNavigate();
+  const [cookies] = useCookies(["token"]);
 
   const fetchDataInitial = useCallback(async () => {
-    console.log(document.cookie);
-
-    // if (document.cookie.length < 250) await refreshToken();
-
-    const token = document.cookie.slice(192);
     try {
+      if (Object.keys(cookies).length === 0) throw new Error("No Refresh Token");
+      if (!Object.keys(cookies).includes("token")) {
+        await refreshTokenFunc(cookies.refreshToken);
+      }
       const response = await fetch(`http://localhost:3000/files`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (!response.ok) throw new Error("Bad data received");
-      const data = await response.json();
+      // if (!response.ok) throw new Error("Bad data received");
+      // const data = await response.json();
 
-      const fileResponse = await fetch(data[0].url);
-      if (!fileResponse.ok) throw new Error("Wrong File Url");
+      // const fileResponse = await fetch(data[0].url);
+      // if (!fileResponse.ok) throw new Error("Wrong File Url");
 
-      const fileBlob = await fileResponse.blob();
+      // const fileBlob = await fileResponse.blob();
 
-      const zipFile = new File([fileBlob], "User Data", { type: fileBlob.type });
+      // const zipFile = new File([fileBlob], "User Data", { type: fileBlob.type });
 
-      const files = [];
+      // const files = [];
 
-      const zipContent = await handleZipFile(zipFile);
+      // const zipContent = await handleZipFile(zipFile);
 
-      zipContent.forEach((relativePath, zipEntry) => {
-        zipEntry.async("blob").then((blob) => {
-          const fileFromZip = new File([blob], relativePath, { type: blob.type });
-          files.push({ id: nanoid(), file: fileFromZip });
-          updateFileList([...fileList, ...files]);
-        });
-      });
+      // zipContent.forEach((relativePath, zipEntry) => {
+      //   zipEntry.async("blob").then((blob) => {
+      //     const fileFromZip = new File([blob], relativePath, { type: blob.type });
+      //     files.push({ id: nanoid(), file: fileFromZip });
+      //     updateFileList([...fileList, ...files]);
+      //   });
+      // });
     } catch (error) {
-      console.error(error);
+      if (error.message === "No Refresh Token") {
+        console.error(error);
+        navigate("/login");
+      }
     }
   });
 
@@ -102,13 +97,11 @@ const FileBox = () => {
       const zipBlob = await zipFiles(fileList);
       const formData = new FormData();
       formData.append("file", zipBlob, "Test.zip");
-      console.log(formData);
+
       const response = await fetch("http://localhost:3000/files", {
         method: "POST",
         body: formData,
       });
-
-      console.log(response);
     } catch (error) {
       console.error("Error generating zip file:", error);
     }
@@ -156,7 +149,7 @@ const FileBox = () => {
       <div onDrop={dragDrop} onDragOver={dragEnter} onDragLeave={dragLeave} className={dragActive ? style.fileBox + " " + style.boxDragOver : style.fileBox}>
         <div className={style.files}>
           {fileList.map((file, index) => (
-            <FileItem downloadItem={saveBlob} removeItem={removeItem} key={index} fileId={file.id} file={file.file} type={file.file.name.split(".").pop()} />
+            <FileItem downloadItem={downloadFile} removeItem={removeItem} key={index} fileId={file.id} file={file.file} type={file.file.name.split(".").pop()} />
           ))}
         </div>
       </div>

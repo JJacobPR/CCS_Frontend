@@ -26,7 +26,6 @@ const Login = () => {
       });
 
       const data = await response.json();
-
       createCookie("refreshToken", data.refreshToken, 2);
       createCookie("token", data.accessToken, 1);
 
