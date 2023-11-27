@@ -6,7 +6,8 @@ import LoginView from "./routes/LoginView.jsx";
 import RegisterView from "./routes/RegisterView.jsx";
 import "./App.scss";
 import UserView from "./routes/UserView.jsx";
-import { CookiesProvider } from "react-cookie";
+import { store } from "./store/store.js";
+import { Provider } from 'react-redux'
 
 const router = createBrowserRouter([
   {
@@ -29,8 +30,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <CookiesProvider defaultSetOptions={{ path: "/" }}>
+    <Provider store={store}>
       <RouterProvider router={router} />
-    </CookiesProvider>
+    </Provider>
   </React.StrictMode>
 );

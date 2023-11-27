@@ -6,11 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import createCookie from "../../helpers/createCookie.js";
+import { useDispatch } from 'react-redux'
+import { update } from "../../store/cookieSlice.js";
 
 const Login = () => {
   const [email, updateEmail] = useState("");
   const [password, updatePassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   const loginHandler = async (event) => {
     event.preventDefault();
@@ -29,6 +32,7 @@ const Login = () => {
       const data = await response.json();
       createCookie("refreshToken", data.refreshToken, 2);
       createCookie("token", data.accessToken, 1);
+      dispatch(update())
 
       if (!response.ok) throw new Error(response.statusText);
 

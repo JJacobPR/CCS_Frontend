@@ -1,7 +1,7 @@
 import createCookie from "./createCookie.js";
 
 const refreshTokenFunc = async (refreshToken) => {
-  console.log("Calling");
+
   const response = await fetch("http://localhost:3000/auth/refreshToken", {
     method: "POST",
     headers: {
@@ -13,7 +13,6 @@ const refreshTokenFunc = async (refreshToken) => {
   });
 
   const data = await response.json();
-
   createCookie("token", data.accessToken, 1);
 };
 
