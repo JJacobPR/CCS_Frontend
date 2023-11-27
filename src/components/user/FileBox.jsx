@@ -19,25 +19,27 @@ const FileBox = (props) => {
   const [fileList, updateFileList] = useState([]);
   const [dragActive, updateDragActive] = useState(false);
 
+  const renderFiles = async () => {
+    const zipFile = new File([props.zipBlob], "User Data", { type: props.zipBlob.type });
+    const files = [];
+    const zipContent = await handleZipFile(zipFile);
+    zipContent.forEach((relativePath, zipEntry) => {
+      zipEntry.async("blob").then((blob) => {
+        const fileFromZip = new File([blob], relativePath, { type: blob.type });
+        files.push({ id: nanoid(), file: fileFromZip });
+        updateFileList([...fileList, ...files]);
+      });
+    });
+  };
+
   useEffect(() => {
-    // console.log(props.zipBlob);
-    // const zipFile = new File([fileBlob], "User Data", { type: fileBlob.type });
-    // const files = [];
-    // const zipContent = await handleZipFile(zipFile);
-    // zipContent.forEach((relativePath, zipEntry) => {
-    //   zipEntry.async("blob").then((blob) => {
-    //     const fileFromZip = new File([blob], relativePath, { type: blob.type });
-    //     files.push({ id: nanoid(), file: fileFromZip });
-    //     updateFileList([...fileList, ...files]);
-    //   });
-    // });
+    if (props.zipBlob.size) renderFiles();
   }, [props.zipBlob]);
 
   const handleZipFile = (file) => {
     return new Promise((resolve, reject) => {
       if (file) {
         const zip = new JSZip();
-
         zip
           .loadAsync(file)
           .then((zipContent) => {
@@ -61,12 +63,21 @@ const FileBox = (props) => {
     try {
       const zipBlob = await zipFiles(fileList);
       const formData = new FormData();
-      formData.append("file", zipBlob, "Test.zip");
+      formData.append("file", zipBlob, "Data.zip");
 
-      const response = await fetch("http://localhost:3000/files", {
-        method: "POST",
-        body: formData,
-      });
+      if (!props.zipID) {
+        const response = await fetch("http://localhost:3000/files", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${props.token}` },
+          body: formData,
+        });
+      } else {
+        const response = await fetch(`http://localhost:3000/files/${props.zipID}`, {
+          method: "PUT",
+          headers: { Authorization: `Bearer ${props.token}` },
+          body: formData,
+        });
+      }
     } catch (error) {
       console.error("Error generating zip file:", error);
     }
