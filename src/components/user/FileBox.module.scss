@@ -38,6 +38,26 @@
     @include p.btnMain;
     height: 2rem;
   }
+
+  @media screen and (max-width: "890px") {
+    flex-direction: column;
+    align-items: center;
+    row-gap: 1rem;
+  }
+
+  .options {
+    display: flex;
+    gap: 1rem;
+
+    @media screen and (max-width: "890px") {
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      button {
+        width: 100%;
+      }
+    }
+  }
 }
 
 .browse {
@@ -45,21 +65,21 @@
   height: 2rem;
   display: flex;
   align-items: center;
+
+  p {
+    opacity: 0.2;
+  }
+
+  input {
+    display: none;
+  }
+
+  label {
+    @include p.btnMain;
+  }
 }
 
-.browse p {
-  opacity: 0.2;
-}
-
-.browse input {
-  display: none;
-}
-
-.browse label {
-  @include p.btnMain;
-}
-
-.boxDragOver {
+.browse .browse .boxDragOver {
   background-color: #eaeaea !important;
 }
 

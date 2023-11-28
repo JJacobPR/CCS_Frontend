@@ -4,6 +4,7 @@ import FileItem from "./FileItem.jsx";
 import { nanoid } from "nanoid";
 import * as JSZip from "JSZip";
 import downloadFile from "../../helpers/downloadFile.js";
+import handleZipFile from "../../helpers/handleZipFile.js";
 
 //Zipping Files on Upload Click
 function zipFiles(fileList) {
@@ -36,25 +37,6 @@ const FileBox = (props) => {
     if (props.zipBlob.size) renderFiles();
   }, [props.zipBlob]);
 
-  const handleZipFile = (file) => {
-    return new Promise((resolve, reject) => {
-      if (file) {
-        const zip = new JSZip();
-        zip
-          .loadAsync(file)
-          .then((zipContent) => {
-            resolve(zipContent);
-          })
-          .catch((error) => {
-            console.error("Error reading zip file:", error);
-            reject(error);
-          });
-      } else {
-        reject(new Error("No file provided."));
-      }
-    });
-  };
-
   const handleFileInput = (e) => {
     handleFile(e.target.files[0]);
   };
@@ -71,12 +53,14 @@ const FileBox = (props) => {
           headers: { Authorization: `Bearer ${props.token}` },
           body: formData,
         });
+        if (response.ok) alert("Files Successfully Updated");
       } else {
         const response = await fetch(`http://localhost:3000/files/${props.zipID}`, {
           method: "PUT",
           headers: { Authorization: `Bearer ${props.token}` },
           body: formData,
         });
+        if (response.ok) alert("Files Successfully Updated");
       }
     } catch (error) {
       console.error("Error generating zip file:", error);
@@ -120,7 +104,11 @@ const FileBox = (props) => {
           <label htmlFor="avatar"> Browse </label>
           <input onChange={handleFileInput} type="file" id="avatar" name="avatar" />
         </div>
-        <button onClick={postChanges}>Update</button>
+        <div className={style.options}>
+          <button onClick={postChanges}>Update</button>
+          <button>Options</button>
+          <button onClick={props.logOut}>Log out</button>
+        </div>
       </div>
       <div onDrop={dragDrop} onDragOver={dragEnter} onDragLeave={dragLeave} className={dragActive ? style.fileBox + " " + style.boxDragOver : style.fileBox}>
         <div className={style.files}>

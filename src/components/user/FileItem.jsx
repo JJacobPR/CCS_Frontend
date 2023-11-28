@@ -13,7 +13,7 @@ const FileItem = (props) => {
   };
 
   return (
-    <div onClick={() => props.downloadItem(props.file, props.file.name)} className={styles.fileItem}>
+    <div onDoubleClick={() => props.downloadItem(props.file, props.file.name)} className={styles.fileItem}>
       <div className={styles.imgWrapper}>
         <img src={img.image ? img.image : basicImg} />
       </div>

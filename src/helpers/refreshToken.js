@@ -11,7 +11,7 @@ const refreshTokenFunc = async (refreshToken) => {
     }),
   });
   const data = await response.json();
-  createCookie("token", data.accessToken, 1);
+  createCookie("token", data.accessToken, 30);
 };
 
 export default refreshTokenFunc;

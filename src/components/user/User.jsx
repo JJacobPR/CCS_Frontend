@@ -3,6 +3,7 @@ import Footer from "../footer/Footer.jsx";
 import FileBox from "./FileBox.jsx";
 import styles from "./User.module.scss";
 import refreshTokenFunc from "../../helpers/refreshToken.js";
+import clearCookies from "../../helpers/clearCookies.js";
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -48,6 +49,12 @@ const User = () => {
     }
   });
 
+  const logout = () => {
+    clearCookies();
+    console.log("Calling");
+    navigate("/login");
+  };
+
   useEffect(() => {
     loginUser();
   }, []);
@@ -59,8 +66,8 @@ const User = () => {
           <img src={logo} />
         </div>
         <div className={styles.app}>
-          <h1>Throw Crate</h1>
-          <FileBox token={token} zipBlob={zipBlob} zipID={zipID} />
+          <h1> Throw Crate</h1>
+          <FileBox logOut={logout} token={token} zipBlob={zipBlob} zipID={zipID} />
         </div>
       </section>
       <Footer />
