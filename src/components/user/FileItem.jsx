@@ -19,9 +19,9 @@ const FileItem = (props) => {
       </div>
       <div className={styles.fileDesc}>
         <p>Name: {props.file.name.length < 20 ? props.file.name : props.file.name.slice(0, 20) + "..."}</p>
-        <p>Size: {(props.file.size / 1024 ** 2).toFixed(2)}mb</p>
+        <p>Size: {(props.file.size / 1024 ** 2).toFixed(3)}mb</p>
       </div>
-      <img onClick={trashClick} className={styles.trashIcon} src={trashIcon} />
+      <img onDoubleClick={trashClick} className={styles.trashIcon} src={trashIcon} />
     </div>
   );
 };

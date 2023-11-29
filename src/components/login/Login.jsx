@@ -4,8 +4,9 @@ import styles from "./Login.module.scss";
 import Footer from "../footer/Footer.jsx";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import createCookie from "../../helpers/createCookie.js";
+import getCookies from "../../helpers/getCookies.js";
 import { useDispatch } from "react-redux";
 import { update } from "../../store/cookieSlice.js";
 
@@ -14,6 +15,11 @@ const Login = () => {
   const [password, updatePassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const cookies = getCookies();
+    if (cookies.refreshToken !== "" || cookies.token !== "") navigate("/user");
+  });
 
   const loginHandler = async (event) => {
     event.preventDefault();
@@ -30,15 +36,18 @@ const Login = () => {
       });
 
       const data = await response.json();
-      console.log(data);
+
+      if (!response.ok) throw new Error(response.statusText);
+
       createCookie("refreshToken", data.refreshToken, 3600);
       createCookie("token", data.accessToken, 30);
       dispatch(update());
 
-      if (!response.ok) throw new Error(response.statusText);
-
       navigate("/user");
     } catch (error) {
+      if (error.message === "Not Found") {
+        alert("Wrong Credentials");
+      }
       console.error(error);
     }
   };

@@ -8,13 +8,22 @@ import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { update } from "../../store/cookieSlice.js";
+import Options from "./Options.jsx";
+import getCookies from "../../helpers/getCookies.js";
 
 const User = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [zipBlob, updateZipBlob] = useState({});
   const [zipID, updateZipID] = useState("");
+  const [userName, updateUserName] = useState("");
   const { token, refreshToken } = useSelector((state) => state.cookies.tokens);
+  const [showModal, updateShowModal] = useState(false);
+
+  useEffect(() => {
+    const cookies = getCookies();
+    if (cookies.refreshToken === "" && cookies.token === "") navigate("/login");
+  });
 
   const loginUser = useCallback(async () => {
     try {
@@ -32,7 +41,7 @@ const User = () => {
       if (!response.ok) throw new Error("Bad data received");
 
       const data = await response.json();
-
+      updateUserName(data.user.name);
       if (!data) throw new Error("No Data");
 
       const fileResponse = await fetch(data.url);
@@ -59,15 +68,24 @@ const User = () => {
     loginUser();
   }, []);
 
+  const closeModal = () => {
+    updateShowModal(false);
+  };
+
+  const displayModal = () => {
+    updateShowModal(true);
+  };
+
   return (
     <div className={styles.useWrapper}>
+      {showModal && <Options closeModal={closeModal} />}
       <section className={styles.useSection}>
         <div className={styles.logo}>
           <img src={logo} />
         </div>
         <div className={styles.app}>
-          <h1> Throw Crate</h1>
-          <FileBox logOut={logout} token={token} zipBlob={zipBlob} zipID={zipID} />
+          <h1>Welcome back {userName}!</h1>
+          <FileBox displayModal={displayModal} logOut={logout} token={token} zipBlob={zipBlob} zipID={zipID} />
         </div>
       </section>
       <Footer />

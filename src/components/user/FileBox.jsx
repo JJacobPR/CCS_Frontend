@@ -72,6 +72,11 @@ const FileBox = (props) => {
       alert("File is too big");
       return;
     }
+
+    if (fileList.some((e) => e.file.name === file.name)) {
+      alert("File with this name already exists");
+      return;
+    }
     updateFileList([...fileList, { id: nanoid(), file }]);
   };
 
@@ -106,7 +111,7 @@ const FileBox = (props) => {
         </div>
         <div className={style.options}>
           <button onClick={postChanges}>Update</button>
-          <button>Options</button>
+          <button onClick={props.displayModal}>Options</button>
           <button onClick={props.logOut}>Log out</button>
         </div>
       </div>
