@@ -1,4 +1,4 @@
-import * as JSZip from "JSZip";
+import * as JSZip from "jszip";
 
 const handleZipFile = (file) => {
   return new Promise((resolve, reject) => {

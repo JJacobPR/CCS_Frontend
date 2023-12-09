@@ -19,7 +19,7 @@ const Register = () => {
     try {
       if (!checkPasswordIdentical()) throw new Error("Passwords are varying");
 
-      const response = await fetch("http://localhost:3000/auth/register", {
+      const response = await fetch("https://fileuploader-css.onrender.com/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

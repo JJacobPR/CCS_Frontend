@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import style from "./FileBox.module.scss";
 import FileItem from "./FileItem.jsx";
 import { nanoid } from "nanoid";
-import * as JSZip from "JSZip";
+import * as JSZip from "jszip";
 import downloadFile from "../../helpers/downloadFile.js";
 import handleZipFile from "../../helpers/handleZipFile.js";
 
