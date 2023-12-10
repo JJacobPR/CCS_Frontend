@@ -16,7 +16,7 @@ const Options = (props) => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/user", {
+      const response = await fetch("https://fileuploader-css.onrender.com/user", {
         method: "PUT",
         headers: { Authorization: `Bearer ${props.token}`, "Content-Type": "application/json" },
         body: { name, password },
