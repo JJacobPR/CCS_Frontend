@@ -48,14 +48,14 @@ const FileBox = (props) => {
       formData.append("file", zipBlob, "Data.zip");
 
       if (!props.zipID) {
-        const response = await fetch("http://localhost:3000/files", {
+        const response = await fetch("https://fileuploader-css.onrender.com/files", {
           method: "POST",
           headers: { Authorization: `Bearer ${props.token}` },
           body: formData,
         });
         if (response.ok) alert("Files Successfully Updated");
       } else {
-        const response = await fetch(`http://localhost:3000/files/${props.zipID}`, {
+        const response = await fetch(`https://fileuploader-css.onrender.com/files/${props.zipID}`, {
           method: "PUT",
           headers: { Authorization: `Bearer ${props.token}` },
           body: formData,

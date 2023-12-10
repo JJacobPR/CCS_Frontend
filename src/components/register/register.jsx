@@ -19,8 +19,9 @@ const Register = () => {
     try {
       if (!checkPasswordIdentical()) throw new Error("Passwords are varying");
 
-      const response = await fetch("https://fileuploader-css.onrender.com/register", {
+      const response = await fetch("https://fileuploader-css.onrender.com/auth/register", {
         method: "POST",
+        mode: "cors",
         headers: {
           "Content-Type": "application/json",
         },
