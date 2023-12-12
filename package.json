@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
-    "jszip": "3.9.1",
+    "jszip": "3.7.1",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
     "nanoid": "^5.0.3",
