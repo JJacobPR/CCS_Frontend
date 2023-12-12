@@ -34,7 +34,7 @@ const User = () => {
         navigate(0);
       }
 
-      const response = await fetch(`https://fileuploader-css.onrender.com/files`, {
+      const response = await fetch(`https://fileuploader-ccs.onrender.com/files`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

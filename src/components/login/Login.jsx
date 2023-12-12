@@ -24,9 +24,8 @@ const Login = () => {
   const loginHandler = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("https://fileuploader-css.onrender.com/auth/login", {
+      const response = await fetch("https://fileuploader-ccs.onrender.com/auth/login", {
         method: "POST",
-        mode: "cors",
         headers: {
           "Content-Type": "application/json",
         },

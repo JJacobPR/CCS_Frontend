@@ -1,7 +1,7 @@
 import createCookie from "./createCookie.js";
 
 const refreshTokenFunc = async (refreshToken) => {
-  const response = await fetch("https://fileuploader-css.onrender.com/auth/refreshToken", {
+  const response = await fetch("https://fileuploader-ccs.onrender.com/auth/refreshToken", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
