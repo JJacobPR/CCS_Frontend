@@ -2,13 +2,13 @@ import { useState, useCallback, useEffect } from "react";
 import style from "./FileBox.module.scss";
 import FileItem from "./FileItem.jsx";
 import { nanoid } from "nanoid";
-import * as JSZip from "jszip";
+const JSZip = await import("jszip/dist/jszip");
 import downloadFile from "../../helpers/downloadFile.js";
 import handleZipFile from "../../helpers/handleZipFile.js";
 
 //Zipping Files on Upload Click
 function zipFiles(fileList) {
-  const zip = new JSZip();
+  const zip = new JSZip.default();
   fileList.forEach((file) => {
     zip.file(file.file.name, file.file);
   });

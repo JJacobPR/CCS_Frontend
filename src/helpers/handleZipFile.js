@@ -1,9 +1,9 @@
-import * as JSZip from "jszip";
+const JSZip = await import("jszip/dist/jszip");
 
 const handleZipFile = (file) => {
   return new Promise((resolve, reject) => {
     if (file) {
-      const zip = new JSZip();
+      const zip = new JSZip.default();
       zip
         .loadAsync(file)
         .then((zipContent) => {
