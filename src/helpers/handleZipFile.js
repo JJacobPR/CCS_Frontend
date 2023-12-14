@@ -1,6 +1,5 @@
-const JSZip = await import("jszip/dist/jszip");
-
-const handleZipFile = (file) => {
+const handleZipFile = async (file) => {
+  const JSZip = await import("jszip/dist/jszip");
   return new Promise((resolve, reject) => {
     if (file) {
       const zip = new JSZip.default();
